@@ -22,6 +22,7 @@ class PaymentModel extends ViewModel
     {
         return [
             'PlaceToPay',
+            'PayPal',
         ];
     }
 }

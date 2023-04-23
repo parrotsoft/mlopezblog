@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\PlaceToPayPayment;
+use App\Services\PaymentFactory;
 use App\ViewModels\PaymentModel;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -16,13 +16,10 @@ class PaymentController extends Controller
 
     public function processPayment(Request $request)
     {
-        if ($request->get('payment_type') == 'PlaceToPay') {
-            $placeToPay = new PlaceToPayPayment();
-            $placeToPay->pay();
-
-            return view('payments.success', [
-                'processor' => $request->get('payment_type')
-            ]);
-        }
+        $processor = (new PaymentFactory())->initializePayment($request->get('payment_type'));
+        $processor->pay();
+        return view('payments.success', [
+            'processor' => $request->get('payment_type')
+        ]);
     }
 }
