@@ -25,6 +25,8 @@
                                     <x-button-component :label="'Edit'" route="{{ route($model.'.show', $item->id) }}"/>
                                 </div>
                             </div>
+                        @elseif($field == 'pay')
+                            <x-button-component :label="'Pagar'" route="{{ route('payments.create', $item->id) }}"/>
                         @elseif($field == 'category')
                             {{ $item->category->name }}
                         @else
