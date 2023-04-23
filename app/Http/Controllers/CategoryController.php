@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Domain\Category\CategoryDestroyAction;
+use App\Domain\Category\CategorySaveAction;
+use App\Domain\Category\CategoryUpdateAction;
+use App\ViewModels\CategoryViewModel;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -10,18 +13,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::all();
-        $headers = [
-            'ID',
-            'Nombre',
-            'Opción'
-        ];
-        $fields = [
-            'id',
-            'name',
-            '*'
-        ];
-        return view('categories.index', compact('categories', 'headers', 'fields'));
+        return view('categories.index', new CategoryViewModel());
     }
 
     public function create()
@@ -31,25 +23,24 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        Category::query()->create($request->all());
+        CategorySaveAction::execute($request->all());
         return redirect(route('categories.index'));
     }
 
     public function show($id)
     {
-        $category = Category::query()->find($id);
-        return view('categories.create', compact('category'));
+        return view('categories.create', new CategoryViewModel($id));
     }
 
     public function update(Request $request, $id)
     {
-        Category::query()->find($id)->update($request->all());
+        CategoryUpdateAction::execute($request->all(), $id);
         return redirect(route('categories.index'));
     }
 
     public function destroy($id)
     {
-        Category::query()->find($id)->delete();
+        CategoryDestroyAction::execute([], $id);
         return redirect(route('categories.index'));
     }
 }
