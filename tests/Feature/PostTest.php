@@ -3,22 +3,27 @@
 namespace Tests\Feature;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class PostTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $user = User::factory()->create();
+        $this->actingAs($user);
+    }
+
     public function test_can_call_index(): void
     {
         Post::factory(10)->create();
 
-        $response = $this->get(route('posts.index'))
-            ->assertOk();
-
-        $this->assertCount(10, $response->json());
+        $this->get(route('posts.index'))
+            ->assertViewIs('posts.index');
     }
 
     public function test_can_store(): void
@@ -26,14 +31,12 @@ class PostTest extends TestCase
         $post = Post::factory()->make();
 
         $this->post(route('posts.store'), [
-            'user_id' => $post->user_id,
             'category_id' => $post->category_id,
             'title' => $post->title,
             'body' => $post->body,
-        ])->assertStatus(201);
+        ])->assertRedirect(route('posts.index'));
 
         $this->assertDatabaseHas('posts', [
-            'user_id' => $post->user_id,
             'category_id' => $post->category_id,
             'title' => $post->title,
             'body' => $post->body,
@@ -44,17 +47,9 @@ class PostTest extends TestCase
     {
         $post = Post::factory()->create();
 
-        $response = $this->get(route('posts.show', $post->id))
-            ->assertOk();
+        $this->get(route('posts.show', $post->id))
+            ->assertViewIs('posts.create');
 
-        $response->assertJson(fn (AssertableJson $json) =>
-            $json->where('id', $post->id)
-            ->where('user_id', $post->user_id)
-            ->where('category_id', $post->category_id)
-            ->where('title', $post->title)
-            ->where('body', $post->body)
-            ->etc()
-        );
     }
 
     public function test_can_update(): void
@@ -64,7 +59,7 @@ class PostTest extends TestCase
         $this->put(route('posts.update', $post->id), [
             'title' => 'test',
             'body' => 'test',
-        ])->assertOk();
+        ])->assertRedirect(route('posts.index'));
 
         $this->assertDatabaseHas('posts', [
             'title' => 'test',
@@ -77,12 +72,18 @@ class PostTest extends TestCase
         $post = Post::factory()->create();
 
         $this->delete(route('posts.destroy', $post->id))
-            ->assertOk();
+            ->assertRedirect(route('posts.index'));
 
         $this->assertDatabaseMissing('posts', [
             'title' => $post->title,
             'body' => $post->body
         ]);
+    }
+
+    public function test_can_see_form_create(): void
+    {
+        $this->get(route('posts.create'))
+            ->assertViewIs('posts.create');
     }
 
 }

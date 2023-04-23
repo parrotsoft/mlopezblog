@@ -3,21 +3,28 @@
 namespace Tests\Feature;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class CategoryTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_can_call_index(): void {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $user = User::factory()->create();
+        $this->actingAs($user);
+    }
+
+    public function test_can_call_index(): void
+    {
         Category::factory(10)->create();
 
-        $response = $this->get(route('categories.index'))
-            ->assertOk();
-
-        $this->assertCount(10, $response->json());
+        $this->get(route('categories.index'))
+            ->assertViewIs('categories.index');
     }
 
     public function test_can_create_category(): void
@@ -25,7 +32,8 @@ class CategoryTest extends TestCase
         $category = Category::factory()->make();
         $this->post(route('categories.store'), [
             'name' => $category->name
-        ])->assertStatus(201);
+        ])
+            ->assertRedirect(route('categories.index'));
 
         $this->assertDatabaseHas('categories', [
             'name' => $category->name
@@ -36,14 +44,8 @@ class CategoryTest extends TestCase
     {
         $category = Category::factory()->create();
 
-        $response = $this->get(route('categories.show', $category->id))
-            ->assertOk();
-
-        $response->assertJson(fn(AssertableJson $json) =>
-            $json->where('id', $category->id)
-            ->where('name', $category->name)
-            ->etc()
-        );
+        $this->get(route('categories.show', $category->id))
+            ->assertViewIs('categories.create');
     }
 
     public function test_can_update_category(): void
@@ -52,7 +54,7 @@ class CategoryTest extends TestCase
 
         $this->put(route('categories.update', $category->id), [
             'name' => 'test'
-        ])->assertOk();
+        ])->assertRedirect(route('categories.index'));
 
         $this->assertDatabaseHas('categories', [
             'name' => 'test'
@@ -64,10 +66,16 @@ class CategoryTest extends TestCase
         $category = Category::factory()->create();
 
         $this->delete(route('categories.destroy', $category->id))
-            ->assertOk();
+            ->assertRedirect(route('categories.index'));
 
         $this->assertDatabaseMissing('categories', [
             'name' => $category->name
         ]);
+    }
+
+    public function test_can_see_create_form(): void
+    {
+        $this->get(route('categories.create'))
+            ->assertViewIs('categories.create');
     }
 }
