@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Domain\Post\PostDestroyAction;
 use App\Domain\Post\PostSaveAction;
 use App\Domain\Post\PostUpdateAction;
+use App\Http\Requests\PostRequest;
 use App\ViewModels\PostViewModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class PostController extends Controller
         return view('posts.create', new PostViewModel());
     }
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         $request->request->add([
             'user_id' => Auth::user()->getAuthIdentifier()

@@ -25,6 +25,7 @@
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    placeholder="Nombre de la Categoría"
                                    value="{{ isset($category) ? $category->name : '' }}">
+                            @error('name') <span class="error text-red-500">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="flex mb-6 w-80">

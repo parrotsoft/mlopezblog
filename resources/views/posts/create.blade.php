@@ -27,6 +27,7 @@
                                         value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
+                            @error('category_id') <span class="error text-red-500">{{ $message }}</span> @enderror
                         </div>
                         <div class="p-2">
                             <label for=""
@@ -34,6 +35,7 @@
                             <input type="text" name="title"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                    value="{{ isset($post) ? $post->title : '' }}">
+                            @error('title') <span class="error text-red-500">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="p-2">
@@ -42,6 +44,7 @@
                             <textarea name="body" rows="10"
                                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 {{ isset($post) ? $post->body : '' }}</textarea>
+                            @error('body') <span class="error text-red-500">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="flex mb-6 w-80">

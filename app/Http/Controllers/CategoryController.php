@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Domain\Category\CategoryDestroyAction;
 use App\Domain\Category\CategorySaveAction;
 use App\Domain\Category\CategoryUpdateAction;
+use App\Http\Requests\CategoryRequest;
 use App\ViewModels\CategoryViewModel;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class CategoryController extends Controller
         return view('categories.create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         CategorySaveAction::execute($request->all());
         return redirect(route('categories.index'));
