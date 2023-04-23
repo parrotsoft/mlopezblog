@@ -25,6 +25,8 @@
                                     <x-button-component :label="'Edit'" route="{{ route($model.'.show', $item->id) }}"/>
                                 </div>
                             </div>
+                        @elseif($field == 'category')
+                            {{ $item->category->name }}
                         @else
                             {{ $item->$field }}
                         @endif
