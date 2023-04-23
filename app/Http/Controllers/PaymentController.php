@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PaymentBase;
 use App\Services\PaymentFactory;
 use App\ViewModels\PaymentModel;
 use Illuminate\Http\Request;
@@ -18,8 +19,14 @@ class PaymentController extends Controller
     {
         $processor = (new PaymentFactory())->initializePayment($request->get('payment_type'));
         $processor->pay();
+        $this->sendEmail($processor);
         return view('payments.success', [
             'processor' => $request->get('payment_type')
         ]);
+    }
+
+    private function sendEmail(PaymentBase $base): void
+    {
+        $base->sendNotification();
     }
 }
