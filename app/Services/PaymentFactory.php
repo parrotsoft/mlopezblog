@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Contracts\PaymentFactoryInterface;
 use App\Contracts\PaymentInterface;
 use Exception;
 
-class PaymentFactory
+class PaymentFactory implements PaymentFactoryInterface
 {
     public function initializePayment(string $type): PaymentBase
     {
