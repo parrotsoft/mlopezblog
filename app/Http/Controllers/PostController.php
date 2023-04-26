@@ -31,6 +31,7 @@ class PostController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validator = Validator::make($request->all(), [
+            'category_id' => 'required',
             'title' => 'required|unique:posts|max:255',
             'body' => 'required',
         ]);
