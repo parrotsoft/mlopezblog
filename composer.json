@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
@@ -19,6 +22,7 @@
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
+        "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^10.1",
         "spatie/laravel-ignition": "^2.0"
     },
@@ -50,6 +54,9 @@
         ],
         "coverage": [
             "php -dxdebug.mode=coverage vendor\\bin\\phpunit --coverage-html html"
+        ],
+        "phpstan": [
+            "vendor\\bin\\phpstan analyse -l 2 app/Domain"
         ]
     },
     "extra": {
