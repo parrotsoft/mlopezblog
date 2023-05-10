@@ -27,7 +27,8 @@ class PostViewModel extends ViewModel
             'ID',
             'Titulo',
             'Categoría',
-            'Opción'
+            'Opción',
+            ''
         ];
     }
 
@@ -37,7 +38,8 @@ class PostViewModel extends ViewModel
             'id',
             'title',
             'category',
-            '*'
+            '*',
+            'pay'
         ];
     }
 
