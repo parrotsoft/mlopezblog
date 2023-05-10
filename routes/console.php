@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Http;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,14 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+
+Artisan::command('create', function () {
+    $config = config('services.paypal');
+
+    $response = Http::post("{$config['urlResource']}v1/oauth2/token", [
+        "{$config['clientId']}:{$config['secretKey']}"
+    ]);
+
+    dd($response->body());
+});

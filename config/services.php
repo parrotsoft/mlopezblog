@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'paypal' => [
+        'clientId' => env('PAYPAL_CLIENT_ID'),
+        'secretKey' => env('PAYPAL_SECRET_KEY'),
+        'urlResource' => env('PAYPAL_URL_RESOURCE'),
+    ],
+
 ];
