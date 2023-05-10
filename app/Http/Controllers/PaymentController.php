@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\PaymentFactoryInterface;
 use App\Services\PaymentBase;
-use App\Services\PaymentFactory;
 use App\ViewModels\PaymentModel;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -15,9 +15,9 @@ class PaymentController extends Controller
         return view('payments.create', new PaymentModel($post_id));
     }
 
-    public function processPayment(Request $request)
+    public function processPayment(Request $request, PaymentFactoryInterface $paymentFactory)
     {
-        $processor = (new PaymentFactory())->initializePayment($request->get('payment_type'));
+        $processor = $paymentFactory->initializePayment($request->get('payment_type'));
         $processor->pay();
         $this->sendEmail($processor);
         return view('payments.success', [
