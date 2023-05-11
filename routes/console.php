@@ -19,7 +19,7 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Artisan::command('pay', function () {
+Artisan::command('create', function () {
     $result = Http::asForm()
         ->withBasicAuth(config('services.paypal.clientId'), config('services.paypal.secretKey'))
         ->post(config('services.paypal.urlResource') . 'oauth2/token', [
@@ -28,6 +28,7 @@ Artisan::command('pay', function () {
 
     if ($result->ok()) {
         $accessToken = $result->json()['access_token'];
+        echo $accessToken.PHP_EOL;
 
         $order = Http::
         withHeaders([
@@ -50,6 +51,7 @@ Artisan::command('pay', function () {
 
         if ($order->created()) {
             $id = $order->json()['id'];
+            echo "Id => $id"; // Con este approved
             $links = collect($order->json()['links'])->where('method','=','REDIRECT')->first();
             $link = $links['href'];
             dd($link);
@@ -58,7 +60,16 @@ Artisan::command('pay', function () {
     } else {
         throw new Exception('Error de credenciales');
     }
+});
 
+#https://www.sandbox.paypal.com/
 
+Artisan::command('pay {reference}', function ($reference) {
+   $response = Http::withHeaders(['Authorization' => 'Bearer A21AAI4jR2Vt_no6daQATUbEq-xozp7by5NW2XnPU3DokM05GH8G_rcHphtXaxXqVUNU3mshW2g_0MeZyQT8pjughx5oDItVA'])
+    ->post(config('services.paypal.urlResource')."checkout/orders/{$reference}/pay", [
+       'disbursement_mode' => 'INSTANT'
+   ]);
+
+   dd($response->body());
 });
 
