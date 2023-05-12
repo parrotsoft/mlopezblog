@@ -73,3 +73,21 @@ Artisan::command('pay {reference}', function ($reference) {
    dd($response->body());
 });
 
+
+Artisan::command('paypal', function () {
+    $clientId = config('services.paypal.clientId');
+    $secretKey = config('services.paypal.secretKey');
+    $urlResource = config('services.paypal.urlResource');
+
+    $paypalClient = new \App\Services\core\PayPalClient($clientId, $secretKey, $urlResource);
+    $paypalClient->getToken()
+        ->setCurrency('USD')
+        ->setReference(uniqid())
+        ->setTotal('1.0')
+        ->setReturnUrl('https://eltiempo.com')
+        ->setCancel('http://terra.com');
+
+   $order = $paypalClient->createOrder();
+   dd($order);
+});
+
