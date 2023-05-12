@@ -37,4 +37,11 @@ return [
         'urlResource' => env('PAYPAL_URL_RESOURCE'),
     ],
 
+    'placetopay' => [
+        'login' => env('PLACETOPAY_LOGIN'),
+        'tranKey' => env('PLACETOPAY_TRANKEY'),
+        'baseUrl' => env('PLACETOPAY_BASE_URL'),
+        'timeout' => env('PLACETOPAY_TIMEOUT'),
+    ],
+
 ];

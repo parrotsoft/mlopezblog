@@ -63,15 +63,9 @@ Artisan::command('create', function () {
 });
 
 #https://www.sandbox.paypal.com/
-
-Artisan::command('pay {reference}', function ($reference) {
-   $response = Http::withHeaders(['Authorization' => 'Bearer A21AAI4jR2Vt_no6daQATUbEq-xozp7by5NW2XnPU3DokM05GH8G_rcHphtXaxXqVUNU3mshW2g_0MeZyQT8pjughx5oDItVA'])
-    ->post(config('services.paypal.urlResource')."checkout/orders/{$reference}/pay", [
-       'disbursement_mode' => 'INSTANT'
-   ]);
-
-   dd($response->body());
-});
+#cliente@blog.com
+#comercio@blog.com
+#1043605421
 
 
 Artisan::command('paypal', function () {
@@ -103,5 +97,10 @@ Artisan::command('paypalsuper', function (\App\Services\core\PayPalClient $paypa
     $order = $paypalClient->createOrder();
     echo json_encode($order);
     $paypalClient->payOrder();
+});
+
+
+Artisan::command('mp', function () {
+    echo 'Mercado Pagos'.PHP_EOL;
 });
 
