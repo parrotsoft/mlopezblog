@@ -33,6 +33,7 @@ class PayPalClient
 
         if ($result->ok()) {
             $this->token = $result->json()['access_token'];
+            session()->put('token_paypal', $this->token);
         }
 
         return $this;
@@ -111,5 +112,9 @@ class PayPalClient
                 'cancel_url' => $this->cancelUrl,
             ]
         ];
+    }
+    public function payOrder(): void
+    {
+        dd(session()->get('token_paypal'));
     }
 }

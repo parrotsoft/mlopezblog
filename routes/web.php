@@ -41,7 +41,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('posts', PostController::class)->only(['index', 'create', 'show', 'store', 'update', 'destroy']);
 
     Route::get('payments/{post_id}', [PaymentController::class, 'create'])->name('payments.create');
+
+
     Route::post('payments', [PaymentController::class, 'processPayment'])->name('payments.processPayment');
+    Route::get('payments/status/return', [PaymentController::class, 'returnPayment'])->name('payments.return');
+    Route::get('payments/status/cancel', [PaymentController::class, 'cancelPayment'])->name('payments.cancel');
 });
 
 require __DIR__ . '/auth.php';

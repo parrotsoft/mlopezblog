@@ -19,14 +19,24 @@ class PaymentController extends Controller
     {
         $processor = $paymentFactory->initializePayment($request->get('payment_type'));
         $processor->pay();
-        $this->sendEmail($processor);
-        return view('payments.success', [
+        // $this->sendEmail($processor);
+        /*return view('payments.success', [
             'processor' => $request->get('payment_type')
-        ]);
+        ]);*/
     }
 
     private function sendEmail(PaymentBase $base): void
     {
         $base->sendNotification();
+    }
+
+    public function returnPayment(Request $request)
+    {
+        dd($request->all());
+    }
+
+    public function cancelPayment(Request $request)
+    {
+        dd($request->all());
     }
 }

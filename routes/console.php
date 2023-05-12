@@ -91,3 +91,17 @@ Artisan::command('paypal', function () {
    dd($order);
 });
 
+
+Artisan::command('paypalsuper', function (\App\Services\core\PayPalClient $paypalClient) {
+    $paypalClient->getToken()
+        ->setCurrency('USD')
+        ->setReference(uniqid())
+        ->setTotal('1.0')
+        ->setReturnUrl('https://eltiempo.com')
+        ->setCancel('http://terra.com');
+
+    $order = $paypalClient->createOrder();
+    echo json_encode($order);
+    $paypalClient->payOrder();
+});
+
