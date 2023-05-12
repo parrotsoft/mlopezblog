@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\PaymentFactoryInterface;
+use App\Services\core\PayPalClient;
 use App\Services\PaymentBase;
 use App\ViewModels\PaymentModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class PaymentController extends Controller
@@ -30,9 +32,10 @@ class PaymentController extends Controller
         $base->sendNotification();
     }
 
-    public function returnPayment(Request $request)
+    public function returnPayment(Request $request, PayPalClient $payPalClient)
     {
-        dd($request->all());
+        $orderId = $request->get('token');
+        $payPalClient->payOrder($orderId);
     }
 
     public function cancelPayment(Request $request)

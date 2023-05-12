@@ -113,8 +113,12 @@ class PayPalClient
             ]
         ];
     }
-    public function payOrder(): void
+    public function payOrder(string $order_od): void
     {
-        dd(session()->get('token_paypal'));
+        $result = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $this->token])
+            ->post(config('services.paypal.urlResource')."checkout/orders/$order_od/pay");
+
+        dd($result);
     }
 }
