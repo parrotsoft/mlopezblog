@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\PaymentInterface;
+use App\Domain\Order\OrderCreateAction;
 use App\Services\core\PlacetoPayClient;
 use Illuminate\Support\Facades\Log;
 
@@ -27,6 +28,15 @@ class PlaceToPayPayment extends PaymentBase
         $order = $placetoPayClient->createOrder();
         $requestId = $order->requestId;
         $processUrl = $order->processUrl;
+
+        OrderCreateAction::execute([
+            'order_id' => $requestId,
+            'provider' => 'PlacetoPay',
+            'url' => $processUrl,
+            'amount' => '2.0',
+            'currency' => 'USD',
+            'status' => 'CREATE',
+        ]);
 
         redirect()->to($processUrl)->send();
 

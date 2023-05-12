@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\PaymentInterface;
+use App\Domain\Order\OrderCreateAction;
 use App\Services\core\PayPalClient;
 use Illuminate\Support\Facades\Log;
 
@@ -25,6 +26,15 @@ class PayPalPayment extends PaymentBase
             ->setCancel(route('payments.cancel'));
 
         $order = $paypalClient->createOrder();
+
+        OrderCreateAction::execute([
+            'order_id' => $order['order_id'],
+            'provider' => 'PayPal',
+            'url' => $order['link'],
+            'amount' => '2.0',
+            'currency' => 'USD',
+            'status' => 'CREATE',
+        ]);
 
         redirect()->to($order['link'])->send();
     }
