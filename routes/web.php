@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -39,6 +40,8 @@ Route::middleware('auth')->group(function () {
         'destroy'
     ]);
     Route::resource('posts', PostController::class)->only(['index', 'create', 'show', 'store', 'update', 'destroy']);
+
+    Route::resource('orders', OrderController::class)->only(['index']);
 
     Route::get('payments/{post_id}', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('payments', [PaymentController::class, 'processPayment'])->name('payments.processPayment');
