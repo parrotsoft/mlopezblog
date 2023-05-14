@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderGetAction
 {
-    public static function execute(int $id): Order|Model
+    public static function execute(string $orderId): Order|Model
     {
-        return Order::query()->find($id);
+        return Order::query()->where('order_id', '=', $orderId)->first();
     }
 }
