@@ -16,15 +16,15 @@ class PayPalClient
     private string $cancelUrl = '';
 
     public function __construct(
-        private string $clientId,
-        private string $secretKey,
-        private string $urlResource
+        private readonly string $clientId,
+        private readonly string $secretKey,
+        private readonly string $urlResource
     )
     {
 
     }
 
-    public function getToken(): self
+    private function getToken(): void
     {
         $result = Http::asForm()
             ->withBasicAuth($this->clientId, $this->secretKey)
@@ -36,8 +36,6 @@ class PayPalClient
             $this->token = $result->json()['access_token'];
             session()->put('token_paypal', $this->token);
         }
-
-        return $this;
     }
 
     public function createOrder(): array
@@ -47,11 +45,8 @@ class PayPalClient
         $uniqid = uniqid();
         session()->put('PayPal-Request-Id', $uniqid);
 
-        $order = Http::
-        withHeaders([
-            'Authorization' => 'Bearer ' . $this->token,
-            'PayPal-Request-Id' => $uniqid,
-        ])->post($this->urlResource . 'v2/checkout/orders',
+        $order = Http::withToken($this->token)
+            ->post($this->urlResource . 'v2/checkout/orders',
             $this->getOrder()
         );
 
@@ -66,6 +61,41 @@ class PayPalClient
         }
 
         return [];
+    }
+
+    private function getOrder(): array
+    {
+        return [
+            'intent' => 'CAPTURE',
+            'purchase_units' => [
+                [
+                    "reference_id" => $this->referenceId,
+                    'amount' => [
+                        'currency_code' => $this->currency,
+                        'value' => $this->total,
+                    ],
+                ]
+            ],
+            'application_context' => [
+                'return_url' => $this->returnUrl,
+                'cancel_url' => $this->cancelUrl,
+            ]
+        ];
+    }
+
+    public function payOrder(string $orderId): string
+    {
+        $this->getToken();
+        $result = Http::withToken($this->token)
+            ->post($this->urlResource . "v2/checkout/orders/$orderId/capture", [
+                'application_context' => [
+                    'return_url' => "",
+                    'cancel_url' => ""
+                ]
+            ]);
+
+
+        return $result->json()['status'];
     }
 
 
@@ -102,42 +132,5 @@ class PayPalClient
         $this->cancelUrl = $url;
 
         return $this;
-    }
-
-    private function getOrder(): array
-    {
-        return [
-            'intent' => 'CAPTURE',
-            'purchase_units' => [
-                [
-                    "reference_id" => $this->referenceId,
-                    'amount' => [
-                        'currency_code' => $this->currency,
-                        'value' => $this->total,
-                    ],
-                ]
-            ],
-            'application_context' => [
-                'return_url' => $this->returnUrl,
-                'cancel_url' => $this->cancelUrl,
-            ]
-        ];
-    }
-
-    public function payOrder(string $order_id): string
-    {
-        $this->getToken();
-        $result = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $this->token
-        ])
-            ->post($this->urlResource . "v2/checkout/orders/$order_id/capture", [
-                'application_context' => [
-                    'return_url' => "",
-                    'cancel_url' => ""
-                ]
-            ]);
-
-
-        return $result->json()['status'];
     }
 }

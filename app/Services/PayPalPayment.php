@@ -18,8 +18,7 @@ class PayPalPayment extends PaymentBase
         $urlResource = config('services.paypal.urlResource');
 
         $paypalClient = new PayPalClient($clientId, $secretKey, $urlResource);
-        $paypalClient->getToken()
-            ->setCurrency('USD')
+        $paypalClient->setCurrency('USD')
             ->setReference(uniqid())
             ->setTotal('25.0')
             ->setReturnUrl(route('payments.return'))
