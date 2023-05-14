@@ -18,7 +18,8 @@ class PayPalClient
     public function __construct(
         private string $clientId,
         private string $secretKey,
-        private string $urlResource)
+        private string $urlResource
+    )
     {
 
     }
@@ -27,7 +28,7 @@ class PayPalClient
     {
         $result = Http::asForm()
             ->withBasicAuth($this->clientId, $this->secretKey)
-            ->post($this->urlResource . 'oauth2/token', [
+            ->post($this->urlResource . 'v1/oauth2/token', [
                 'grant_type' => 'client_credentials'
             ]);
 
@@ -41,20 +42,26 @@ class PayPalClient
 
     public function createOrder(): array
     {
+        $this->getToken();
+
+        $uniqid = uniqid();
+        session()->put('PayPal-Request-Id', $uniqid);
+
         $order = Http::
         withHeaders([
             'Authorization' => 'Bearer ' . $this->token,
-        ])->post($this->urlResource.'checkout/orders',
+            'PayPal-Request-Id' => $uniqid,
+        ])->post($this->urlResource . 'v2/checkout/orders',
             $this->getOrder()
         );
 
         if ($order->created()) {
-            $links = collect($order->json()['links'])->where('method','=','REDIRECT')->first();
+            $links = collect($order->json()['links'])->where('rel', '=', 'approve')->first();
             $link = $links['href'];
 
             return [
                 'order_id' => $order->json()['id'],
-                'link' => $link ,
+                'link' => $link,
             ];
         }
 
@@ -69,13 +76,15 @@ class PayPalClient
         return $this;
     }
 
-    public function setCurrency(string $currency): self {
+    public function setCurrency(string $currency): self
+    {
         $this->currency = $currency;
 
         return $this;
     }
 
-    public function setTotal(string $total): self {
+    public function setTotal(string $total): self
+    {
         $this->total = $total;
 
         return $this;
@@ -98,27 +107,37 @@ class PayPalClient
     private function getOrder(): array
     {
         return [
+            'intent' => 'CAPTURE',
             'purchase_units' => [
                 [
                     "reference_id" => $this->referenceId,
                     'amount' => [
-                        'currency' => $this->currency,
-                        'total' => $this->total,
+                        'currency_code' => $this->currency,
+                        'value' => $this->total,
                     ],
                 ]
             ],
-            'redirect_urls' => [
+            'application_context' => [
                 'return_url' => $this->returnUrl,
                 'cancel_url' => $this->cancelUrl,
             ]
         ];
     }
-    public function payOrder(string $order_od): void
-    {
-        $result = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $this->token])
-            ->post(config('services.paypal.urlResource')."checkout/orders/$order_od/pay");
 
-        dd($result);
+    public function payOrder(string $order_id): string
+    {
+        $this->getToken();
+        $result = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $this->token
+        ])
+            ->post($this->urlResource . "v2/checkout/orders/$order_id/capture", [
+                'application_context' => [
+                    'return_url' => "",
+                    'cancel_url' => ""
+                ]
+            ]);
+
+
+        return $result->json()['status'];
     }
 }

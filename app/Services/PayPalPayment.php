@@ -21,7 +21,7 @@ class PayPalPayment extends PaymentBase
         $paypalClient->getToken()
             ->setCurrency('USD')
             ->setReference(uniqid())
-            ->setTotal('1.0')
+            ->setTotal('25.0')
             ->setReturnUrl(route('payments.return'))
             ->setCancel(route('payments.cancel'));
 
@@ -31,7 +31,7 @@ class PayPalPayment extends PaymentBase
             'order_id' => $order['order_id'],
             'provider' => 'PayPal',
             'url' => $order['link'],
-            'amount' => '2.0',
+            'amount' => '25.0',
             'currency' => 'USD',
             'status' => 'CREATE',
         ]);

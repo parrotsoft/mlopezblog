@@ -21,10 +21,8 @@ class PaymentController extends Controller
     {
         $processor = $paymentFactory->initializePayment($request->get('payment_type'));
         $processor->pay();
+
         // $this->sendEmail($processor);
-        /*return view('payments.success', [
-            'processor' => $request->get('payment_type')
-        ]);*/
     }
 
     private function sendEmail(PaymentBase $base): void
@@ -35,7 +33,14 @@ class PaymentController extends Controller
     public function returnPayment(Request $request, PayPalClient $payPalClient)
     {
         $orderId = $request->get('token');
-        $payPalClient->payOrder($orderId);
+        $result = $payPalClient->payOrder($orderId);
+        if ($result == 'COMPLETED') {
+            return view('payments.success', [
+                'processor' => $payPalClient::class
+            ]);
+        }
+
+        dd('Error ' . $result);
     }
 
     public function cancelPayment(Request $request)
