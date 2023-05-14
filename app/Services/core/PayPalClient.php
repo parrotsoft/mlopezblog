@@ -47,8 +47,8 @@ class PayPalClient
 
         $order = Http::withToken($this->token)
             ->post($this->urlResource . 'v2/checkout/orders',
-            $this->getOrder()
-        );
+                $this->getOrder()
+            );
 
         if ($order->created()) {
             $links = collect($order->json()['links'])->where('rel', '=', 'approve')->first();
@@ -93,8 +93,6 @@ class PayPalClient
                     'cancel_url' => ""
                 ]
             ]);
-
-
         return $result->json()['status'];
     }
 

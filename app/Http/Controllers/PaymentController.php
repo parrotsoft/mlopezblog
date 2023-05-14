@@ -19,6 +19,7 @@ class PaymentController extends Controller
 
     public function processPayment(Request $request, PaymentFactoryInterface $paymentFactory)
     {
+        session()->put('payment_type', $request->get('payment_type'));
         $processor = $paymentFactory->initializePayment($request->get('payment_type'));
         $processor->pay();
 
@@ -30,17 +31,11 @@ class PaymentController extends Controller
         $base->sendNotification();
     }
 
-    public function returnPayment(Request $request, PayPalClient $payPalClient)
+    public function returnPayment(Request $request, PaymentFactoryInterface $paymentFactory)
     {
-        $orderId = $request->get('token');
-        $result = $payPalClient->payOrder($orderId);
-        if ($result == 'COMPLETED') {
-            return view('payments.success', [
-                'processor' => $payPalClient::class
-            ]);
-        }
 
-        dd('Error ' . $result);
+        $processor = $paymentFactory->initializePayment(session()->get('payment_type'));
+        return $processor->payOrder($request);
     }
 
     public function cancelPayment(Request $request)

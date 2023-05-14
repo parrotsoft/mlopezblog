@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\PaymentInterface;
 use App\Domain\Order\OrderCreateAction;
 use App\Services\core\PayPalClient;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class PayPalPayment extends PaymentBase
@@ -41,5 +42,18 @@ class PayPalPayment extends PaymentBase
     public function sendNotification()
     {
         Log::info('[PAY]: Enviamos la notificacion PayPal');
+    }
+
+    public function payOrder(Request $request)
+    {
+        $orderId = $request->get('token');
+        $paypalClient = resolve(PayPalClient::class);
+        $result = $paypalClient->payOrder($orderId);
+
+        if ($result == 'COMPLETED') {
+            return view('payments.success', [
+                'processor' => session()->get('payment_type')
+            ]);
+        }
     }
 }

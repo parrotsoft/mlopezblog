@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\PaymentInterface;
 use App\Domain\Order\OrderCreateAction;
 use App\Services\core\PlacetoPayClient;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class PlaceToPayPayment extends PaymentBase
@@ -45,5 +46,10 @@ class PlaceToPayPayment extends PaymentBase
     public function sendNotification()
     {
         Log::info('[PAY]: Enviamos la notificacion PlaceToPay');
+    }
+
+    public function payOrder(Request $request)
+    {
+        dd($request);
     }
 }
