@@ -43,14 +43,14 @@ class Order extends Model
 
     public function completed(): void
     {
-        $this->query()->update([
+        $this->update([
             'status' => 'COMPLETED'
         ]);
     }
 
     public function canceled(): void
     {
-        $this->query()->update([
+        $this->update([
             'status' => 'CANCELED'
         ]);
     }
