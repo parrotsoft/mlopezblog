@@ -5,9 +5,8 @@ namespace App\Services;
 use App\Contracts\PaymentInterface;
 use App\Domain\Order\OrderCompletedAction;
 use App\Domain\Order\OrderCreateAction;
+use App\Domain\Order\OrderUpdateAction;
 use App\Services\core\PayPalClient;
-use Illuminate\Http\Request;
-use App\Domain\Order\OrderCreateAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -28,17 +27,15 @@ class PayPalPayment extends PaymentBase
             ->setReturnUrl(route('payments.return'))
             ->setCancel(route('payments.cancel'));
 
-        $order = $paypalClient->createOrder();
+        $orderPayPal = $paypalClient->createOrder();
 
-        OrderCreateAction::execute([
-            'order_id' => $order['order_id'],
-            'provider' => 'PayPal',
-            'url' => $order['link'],
-            'amount' => '25.0',
-            'currency' => 'USD',
-        ]);
+        $order = OrderCreateAction::execute($request->all());
 
-        redirect()->to($order['link'])->send();
+        $order->url = $orderPayPal['link'];
+        $order->order_id = $orderPayPal['order_id'];
+        OrderUpdateAction::execute($order);
+
+        redirect()->to($orderPayPal['link'])->send();
     }
 
     public function sendNotification()

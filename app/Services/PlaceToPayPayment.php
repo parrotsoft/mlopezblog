@@ -2,12 +2,9 @@
 
 namespace App\Services;
 
-use App\Contracts\PaymentInterface;
-use App\Domain\Order\OrderCreateAction;
-use App\Services\core\PlacetoPayClient;
-use Illuminate\Http\Request;
 use App\Domain\Order\OrderCreateAction;
 use App\Domain\Order\OrderUpdateAction;
+use App\Services\core\PlacetoPayClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -29,18 +26,15 @@ class PlaceToPayPayment extends PaymentBase
             ->setReturnUrl(route('payments.return'))
             ->setDescription('Pago de zapatos');
 
-        $order = $placetoPayClient->createOrder();
-        $requestId = $order->requestId;
-        $processUrl = $order->processUrl;
+        $orderP2p = $placetoPayClient->createOrder();
+        $requestId = $orderP2p->requestId;
+        $processUrl = $orderP2p->processUrl;
 
-        OrderCreateAction::execute([
-            'order_id' => $requestId,
-            'provider' => 'PlacetoPay',
-            'url' => $processUrl,
-            'amount' => '2.0',
-            'currency' => 'USD',
-            'status' => 'CREATE',
-        ]);
+        $order = OrderCreateAction::execute($request->all());
+        $order->order_id = $requestId;
+        $order->url = $processUrl;
+
+        OrderUpdateAction::execute($order);
 
         redirect()->to($processUrl)->send();
 
