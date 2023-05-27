@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\PaymentInterface;
+use App\Domain\Order\OrderCompletedAction;
 use App\Domain\Order\OrderCreateAction;
 use App\Services\core\PayPalClient;
 use Illuminate\Http\Request;
@@ -33,7 +34,6 @@ class PayPalPayment extends PaymentBase
             'url' => $order['link'],
             'amount' => '25.0',
             'currency' => 'USD',
-            'status' => 'CREATE',
         ]);
 
         redirect()->to($order['link'])->send();
@@ -51,6 +51,7 @@ class PayPalPayment extends PaymentBase
         $result = $paypalClient->payOrder($orderId);
 
         if ($result == 'COMPLETED') {
+            OrderCompletedAction::execute($orderId);
             return view('payments.success', [
                 'processor' => session()->get('payment_type')
             ]);
