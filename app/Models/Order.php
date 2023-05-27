@@ -18,6 +18,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'post_id',
         'order_id',
         'provider',
         'url',
@@ -28,6 +29,7 @@ class Order extends Model
 
     protected $casts = [
         'user_id' => 'integer',
+        'post_id' => 'integer',
         'order_id' => 'integer',
         'provider' => 'string',
         'url' => 'string',

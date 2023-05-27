@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,11 +20,12 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => User::factory()->create(),
+            'post_id' => Post::factory()->create(),
             'order_id' => $this->faker->lexify,
             'provider' => $this->faker->randomElement(['PayPal', 'PlacetoPay']),
             'url' => $this->faker->url(),
             'amount' => $this->faker->randomFloat(2),
-            'currency' => $this->faker->randomElement(['USD', 'COP']),
+            'currency' => $this->faker->randomElement(['COP']),
             'status' => $this->faker->randomElement(['PENDING', 'COMPLETED', 'CANCELED']),
         ];
     }
