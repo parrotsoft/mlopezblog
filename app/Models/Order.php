@@ -13,7 +13,7 @@ class Order extends Model
     protected $table = 'orders';
 
     protected $with = [
-      'user'
+        'user'
     ];
 
     protected $fillable = [
@@ -28,16 +28,30 @@ class Order extends Model
 
     protected $casts = [
         'user_id' => 'integer',
-        'order_id' => 'string',
+        'order_id' => 'integer',
         'provider' => 'string',
         'url' => 'string',
-        'amount' => 'double',
+        'amount' => 'integer',
         'currency' => 'string',
         'status' => 'string',
     ];
 
     public function user(): HasOne
     {
-        return $this->hasOne(User::class,'id','user_id');
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function completed(): void
+    {
+        $this->update([
+            'status' => 'COMPLETED'
+        ]);
+    }
+
+    public function canceled(): void
+    {
+        $this->update([
+            'status' => 'CANCELED'
+        ]);
     }
 }

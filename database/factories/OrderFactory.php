@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,13 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory()->create(),
+            'order_id' => $this->faker->lexify,
+            'provider' => $this->faker->randomElement(['PayPal', 'PlacetoPay']),
+            'url' => $this->faker->url(),
+            'amount' => $this->faker->randomFloat(2),
+            'currency' => $this->faker->randomElement(['USD', 'COP']),
+            'status' => $this->faker->randomElement(['PENDING', 'COMPLETED', 'CANCELED']),
         ];
     }
 }
