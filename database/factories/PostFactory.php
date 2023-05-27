@@ -23,6 +23,7 @@ class PostFactory extends Factory
             'category_id' => Category::factory()->create(),
             'title' => $this->faker->sentence,
             'body' => $this->faker->text,
+            'price' => $this->faker->numberBetween(10000, 100000),
         ];
     }
 }

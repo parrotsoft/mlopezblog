@@ -14,13 +14,15 @@ class Post extends Model
         'category_id',
         'title',
         'body',
+        'price',
     ];
 
     protected $casts = [
         'user_id' => 'integer',
         'category_id' => 'integer',
         'title' => 'string',
-        'body' => 'string'
+        'body' => 'string',
+        'price' => 'integer',
     ];
 
     protected $with = [
@@ -30,5 +32,10 @@ class Post extends Model
     public function category()
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
+    }
+
+    public function getFormattedPriceAttribute()
+    {
+        return number_format($this->attributes['price'], 0, ',', '.');
     }
 }

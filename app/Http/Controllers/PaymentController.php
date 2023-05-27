@@ -21,9 +21,7 @@ class PaymentController extends Controller
     {
         session()->put('payment_type', $request->get('payment_type'));
         $processor = $paymentFactory->initializePayment($request->get('payment_type'));
-        $processor->pay();
-
-        // $this->sendEmail($processor);
+        $processor->pay($request);
     }
 
     private function sendEmail(PaymentBase $base): void

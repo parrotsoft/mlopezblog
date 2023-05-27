@@ -27,6 +27,7 @@ class PostViewModel extends ViewModel
             'ID',
             'Titulo',
             'Categoría',
+            'Valor',
             'Opción',
             ''
         ];
@@ -38,6 +39,7 @@ class PostViewModel extends ViewModel
             'id',
             'title',
             'category',
+            'price',
             '*',
             'pay'
         ];

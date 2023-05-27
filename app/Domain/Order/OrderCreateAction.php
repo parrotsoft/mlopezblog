@@ -9,7 +9,11 @@ class OrderCreateAction
 {
     public static function execute(array $data): Model
     {
-        $data['user_id'] = auth()->id();
-        return Order::query()->create($data);
+        return Order::query()->create([
+            'user_id' => auth()->id(),
+            'provider' => $data['payment_type'],
+            'amount' => $data['price'],
+            'post_id' => $data['post_id'],
+        ]);
     }
 }

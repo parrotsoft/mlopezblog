@@ -7,11 +7,13 @@ use App\Domain\Order\OrderCompletedAction;
 use App\Domain\Order\OrderCreateAction;
 use App\Services\core\PayPalClient;
 use Illuminate\Http\Request;
+use App\Domain\Order\OrderCreateAction;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class PayPalPayment extends PaymentBase
 {
-    public function pay(): void
+    public function pay(Request $request): void
     {
         Log::info('[PAY]: Pago con PayPal');
 
