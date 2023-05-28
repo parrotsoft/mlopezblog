@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\PaymentFactoryInterface;
-use App\Services\core\PayPalClient;
 use App\Services\PaymentBase;
 use App\ViewModels\PaymentModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\View\View;
 
 class PaymentController extends Controller
