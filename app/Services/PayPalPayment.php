@@ -52,7 +52,8 @@ class PayPalPayment extends PaymentBase
         if ($result == 'COMPLETED') {
             OrderCompletedAction::execute($orderId);
             return view('payments.success', [
-                'processor' => session()->get('payment_type')
+                'processor' => session()->get('payment_type'),
+                'status' => 'COMPLETED'
             ]);
         }
     }
