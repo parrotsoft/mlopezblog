@@ -21,7 +21,8 @@ class PaymentController extends Controller
         $processor->pay($request);
         $this->sendEmail($processor);
         return view('payments.success', [
-            'processor' => $request->get('payment_type')
+            'processor' => $request->get('payment_type'),
+            'status' => 'COMPLETED'
         ]);
     }
 
