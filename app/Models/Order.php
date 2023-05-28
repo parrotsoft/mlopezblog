@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
@@ -13,7 +14,8 @@ class Order extends Model
     protected $table = 'orders';
 
     protected $with = [
-        'user'
+        'user',
+        'post',
     ];
 
     protected $fillable = [
@@ -55,5 +57,10 @@ class Order extends Model
         $this->update([
             'status' => 'CANCELED'
         ]);
+    }
+
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(Post::class);
     }
 }
