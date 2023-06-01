@@ -6,10 +6,10 @@ use App\Contracts\PaymentInterface;
 use App\Domain\Order\OrderCreateAction;
 use App\Domain\Order\OrderGetLastAction;
 use App\Domain\Order\OrderUpdateAction;
-use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -17,22 +17,21 @@ use Illuminate\Support\Str;
 
 class PlaceToPayPayment extends PaymentBase
 {
-    public function pay(Request $request): void
+    public function pay(Request $request): RedirectResponse
     {
         Log::info('[PAY]: Pago con PlaceToPay');
 
         $order = OrderCreateAction::execute($request->all());
 
         $result = Http::post(config('placetopay.url').'/api/session',
-            $this->createSession($order, $request->ip(), $request->userAgent()));
+        $this->createSession($order, $request->ip(), $request->userAgent()));
 
         if ($result->ok()) {
             $order->order_id = $result->json()['requestId'];
             $order->url = $result->json()['processUrl'];
 
             OrderUpdateAction::execute($order);
-
-            redirect()->to($order->url)->send();
+            return redirect()->to($order->url);
         }
 
         throw new \Exception($result->body());
