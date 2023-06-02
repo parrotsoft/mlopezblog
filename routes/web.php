@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('payments/{post_id}', [PaymentController::class, 'create'])->name('payments.create');
     Route::post('payments', [PaymentController::class, 'processPayment'])->name('payments.processPayment');
+    Route::get('payments/payment/response', [PaymentController::class, 'processResponse'])->name('payments.processResponse');
 });
 
 require __DIR__ . '/auth.php';
