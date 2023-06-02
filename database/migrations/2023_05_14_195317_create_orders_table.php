@@ -13,15 +13,17 @@ return new class extends Migration {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->string('order_id');
+            $table->unsignedBigInteger('post_id');
+            $table->string('order_id')->nullable();
             $table->string('provider');
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->double('amount', 16, 2);
-            $table->enum('currency', ['USD', 'COP']);
+            $table->enum('currency', ['COP'])->default('COP');
             $table->enum('status', ['PENDING', 'COMPLETED', 'CANCELED'])->default('PENDING');
             $table->timestamps();
 
             $table->foreign('user_id')->on('users')->references('id');
+            $table->foreign('post_id')->on('posts')->references('id');
         });
     }
 
