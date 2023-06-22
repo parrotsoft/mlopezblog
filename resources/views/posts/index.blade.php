@@ -10,7 +10,10 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
-                    <x-button-component :label="'Nuevo'" route="{{ route('posts.create') }}"/>
+                    <div class="flex justify-between">
+                        <x-button-component :label="'Nuevo'" route="{{ route('posts.create') }}"/>
+                        <x-button-component :label="'Exportar'" route="{{ route('posts.export') }}"/>
+                    </div>
 
                     <div class="my-4">
                         <x-table-component :headers="$headers" :collections="$posts"

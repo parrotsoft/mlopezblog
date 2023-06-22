@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostExportController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,7 @@ Route::middleware('auth')->group(function () {
         'update',
         'destroy'
     ]);
+    Route::get('posts/exports', PostExportController::class)->name('posts.export');
     Route::resource('posts', PostController::class)->only(['index', 'create', 'show', 'store', 'update', 'destroy']);
 
     Route::resource('orders', OrderController::class)->only(['index']);
