@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\PostExportController;
+namespace Tests\Feature\Web\PostExportController;
 
 use App\Jobs\PostExportJob;
 use App\Models\User;

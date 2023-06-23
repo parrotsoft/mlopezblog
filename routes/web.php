@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\PostExportController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\CategoryController;
+use App\Http\Controllers\Web\OrderController;
+use App\Http\Controllers\Web\PaymentController;
+use App\Http\Controllers\Web\PostController;
+use App\Http\Controllers\Web\PostExportController;
+use App\Http\Controllers\Web\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use App\Domain\Post\PostDestroyAction;
 use App\Domain\Post\PostSaveAction;
 use App\Domain\Post\PostUpdateAction;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\ViewModels\PostViewModel;
 use Illuminate\Http\RedirectResponse;

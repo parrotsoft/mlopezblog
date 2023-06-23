@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use App\Domain\Category\CategoryDestroyAction;
 use App\Domain\Category\CategorySaveAction;
 use App\Domain\Category\CategoryUpdateAction;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\ViewModels\CategoryViewModel;
 use Illuminate\Http\RedirectResponse;

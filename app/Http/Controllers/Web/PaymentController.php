@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use App\Contracts\PaymentFactoryInterface;
+use App\Http\Controllers\Controller;
 use App\Services\PaymentBase;
 use App\Services\PlaceToPayPayment;
 use App\ViewModels\PaymentModel;
