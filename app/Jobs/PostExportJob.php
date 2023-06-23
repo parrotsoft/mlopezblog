@@ -20,7 +20,7 @@ class PostExportJob implements ShouldQueue
     public $maxExceptions = 1;
 
 
-    public function handle(): void
+    public function handle($name = null): void
     {
         $headers = [
             'title',
@@ -30,7 +30,7 @@ class PostExportJob implements ShouldQueue
             'user'
         ];
 
-        $fileName = sprintf("exports/%s.csv", Str::uuid()->serialize());
+        $fileName = sprintf("exports/%s.csv", $name ?? Str::uuid()->serialize());
         $this->createFile($fileName);
         $file = $this->openFile($fileName);
         fputcsv($file, $headers);

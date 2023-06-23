@@ -14,10 +14,7 @@ class PostExportsControllerTest extends TestCase
     {
         $this->actingAs(User::factory()->create())
             ->get(route('posts.export'))
-            ->assertOk()
-            ->assertJsonFragment([
-                'response' => 200,
-            ]);
+            ->assertRedirect();
     }
 
     /** @test */
@@ -26,10 +23,7 @@ class PostExportsControllerTest extends TestCase
         Queue::fake();
         $this->actingAs(User::factory()->create())
             ->get(route('posts.export'))
-            ->assertOk()
-            ->assertJsonFragment([
-                'response' => 200,
-            ]);
+            ->assertRedirect();
 
         Queue::assertPushed(PostExportJob::class);
     }
