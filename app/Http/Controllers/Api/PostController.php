@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Contracts\ApiExportController;
-use App\Contracts\BaseApiController;
-use App\Domain\Post\PostListAction;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
-class PostController extends Controller implements BaseApiController, ApiExportController
+class PostController extends Controller
 {
-    //
-    public function index(): Collection
+    public function index(): void
     {
-        return PostListAction::execute([]);
+        // TODO: Implement index() method.
     }
 
     public function store(Request $request): void
