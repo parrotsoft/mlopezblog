@@ -2,38 +2,59 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Domain\Post\PostDestroyAction;
+use App\Domain\Post\PostSaveAction;
+use App\Domain\Post\PostUpdateAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostRequest;
+use App\Http\Resources\PostResource;
+use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostController extends Controller
 {
-    public function index(): void
+    public function index(): AnonymousResourceCollection
     {
-        // TODO: Implement index() method.
+        $posts = Post::query()->paginate(10);
+
+        return PostResource::collection($posts);
     }
 
-    public function store(Request $request): void
+    public function store(PostRequest $request): JsonResponse
     {
-        // TODO: Implement store() method.
+        $data = $request->all();
+        $data['user_id'] = $request->user()->getKey();
+
+        $post = PostSaveAction::execute($data);
+
+        return response()->json([
+            'message' => trans('message.created', ['attribute' => 'post']),
+            'data' => new PostResource($post)
+        ],201);
     }
 
-    public function show(int $id): void
+    public function show(Post $post): PostResource
     {
-        // TODO: Implement show() method.
+        return PostResource::make($post);
     }
 
-    public function update(Request $request, int $id): void
+    public function update(Request $request, int $id): JsonResponse
     {
-        // TODO: Implement update() method.
+        PostUpdateAction::execute($request->all(), $id);
+
+        return response()->json([
+            'message' => trans('message.updated', ['attribute' => 'post'])
+        ],200);
     }
 
-    public function destroy($id): void
+    public function destroy(int $id): JsonResponse
     {
-        // TODO: Implement destroy() method.
-    }
+        PostDestroyAction::execute([], $id);
 
-    public function export(): void
-    {
-        // TODO: Implement export() method.
+        return response()->json([
+            'message' => trans('message.deleted', ['attribute' => 'post'])
+        ],200);
     }
 }

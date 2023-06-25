@@ -16,11 +16,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::name('api.')->group(function () {
+    // TODO Route::post('register', RegisterController::class)->name('register');
+
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/user', function (Request $request) {
+            return $request->user();
+        });
+
+        Route::apiResource('posts', PostController::class);
+        Route::apiResource('categories', CategoryController::class);
+    });
 });
 
 
-Route::get('posts', [PostController::class, 'index']);
-Route::get('gategories', [CategoryController::class, 'index']);
+
 
