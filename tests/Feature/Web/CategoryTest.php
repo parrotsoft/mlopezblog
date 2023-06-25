@@ -31,12 +31,12 @@ class CategoryTest extends TestCase
     {
         $category = Category::factory()->make();
         $this->post(route('categories.store'), [
-            'name' => $category->name
+            'name' => $category->name,
         ])
             ->assertRedirect(route('categories.index'));
 
         $this->assertDatabaseHas('categories', [
-            'name' => $category->name
+            'name' => $category->name,
         ]);
     }
 
@@ -53,11 +53,11 @@ class CategoryTest extends TestCase
         $category = Category::factory()->create();
 
         $this->put(route('categories.update', $category->id), [
-            'name' => 'test'
+            'name' => 'test',
         ])->assertRedirect(route('categories.index'));
 
         $this->assertDatabaseHas('categories', [
-            'name' => 'test'
+            'name' => 'test',
         ]);
     }
 
@@ -69,7 +69,7 @@ class CategoryTest extends TestCase
             ->assertRedirect(route('categories.index'));
 
         $this->assertDatabaseMissing('categories', [
-            'name' => $category->name
+            'name' => $category->name,
         ]);
     }
 

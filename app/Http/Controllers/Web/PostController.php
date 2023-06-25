@@ -15,7 +15,6 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
-
     public function index(): View
     {
         return view('posts.index', new PostViewModel());
@@ -29,9 +28,10 @@ class PostController extends Controller
     public function store(PostRequest $request): RedirectResponse
     {
         $request->request->add([
-            'user_id' => Auth::user()->getAuthIdentifier()
+            'user_id' => Auth::user()->getAuthIdentifier(),
         ]);
         PostSaveAction::execute($request->all());
+
         return redirect(route('posts.index'));
     }
 
@@ -43,12 +43,14 @@ class PostController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         PostUpdateAction::execute($request->all(), $id);
+
         return redirect(route('posts.index'));
     }
 
     public function destroy($id): RedirectResponse
     {
         PostDestroyAction::execute([], $id);
+
         return redirect(route('posts.index'));
     }
 }

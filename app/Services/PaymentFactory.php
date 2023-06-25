@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Contracts\PaymentFactoryInterface;
-use App\Contracts\PaymentInterface;
 use Exception;
 
 class PaymentFactory implements PaymentFactoryInterface

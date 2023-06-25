@@ -14,7 +14,6 @@ use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-
     public function index(): View
     {
         return view('categories.index', new CategoryViewModel());
@@ -28,6 +27,7 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request): RedirectResponse
     {
         CategorySaveAction::execute($request->all());
+
         return redirect(route('categories.index'));
     }
 
@@ -39,12 +39,14 @@ class CategoryController extends Controller
     public function update(Request $request, $id): RedirectResponse
     {
         CategoryUpdateAction::execute($request->all(), $id);
+
         return redirect(route('categories.index'));
     }
 
     public function destroy($id): RedirectResponse
     {
         CategoryDestroyAction::execute([], $id);
+
         return redirect(route('categories.index'));
     }
 }

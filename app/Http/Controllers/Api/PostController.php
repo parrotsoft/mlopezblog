@@ -31,8 +31,8 @@ class PostController extends Controller
 
         return response()->json([
             'message' => trans('message.created', ['attribute' => 'post']),
-            'data' => new PostResource($post)
-        ],201);
+            'data' => new PostResource($post),
+        ], 201);
     }
 
     public function show(Post $post): PostResource
@@ -45,8 +45,8 @@ class PostController extends Controller
         PostUpdateAction::execute($request->all(), $id);
 
         return response()->json([
-            'message' => trans('message.updated', ['attribute' => 'post'])
-        ],200);
+            'message' => trans('message.updated', ['attribute' => 'post']),
+        ], 200);
     }
 
     public function destroy(int $id): JsonResponse
@@ -54,7 +54,7 @@ class PostController extends Controller
         PostDestroyAction::execute([], $id);
 
         return response()->json([
-            'message' => trans('message.deleted', ['attribute' => 'post'])
-        ],200);
+            'message' => trans('message.deleted', ['attribute' => 'post']),
+        ], 200);
     }
 }

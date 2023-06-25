@@ -36,7 +36,7 @@ class Post extends Model
     ];
 
     protected $with = [
-        'category'
+        'category',
     ];
 
     public function category()

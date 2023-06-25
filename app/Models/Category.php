@@ -10,10 +10,10 @@ class Category extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     protected $casts = [
-        'name' => 'string'
+        'name' => 'string',
     ];
 }

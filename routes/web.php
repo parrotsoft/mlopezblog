@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
         'show',
         'store',
         'update',
-        'destroy'
+        'destroy',
     ]);
     Route::get('posts/exports', PostExportController::class)->name('posts.export');
     Route::resource('posts', PostController::class)->only(['index', 'create', 'show', 'store', 'update', 'destroy']);
@@ -50,4 +50,4 @@ Route::middleware('auth')->group(function () {
     Route::get('payments/payment/response', [PaymentController::class, 'processResponse'])->name('payments.processResponse');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

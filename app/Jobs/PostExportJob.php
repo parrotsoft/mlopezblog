@@ -19,7 +19,6 @@ class PostExportJob implements ShouldQueue
 
     public $maxExceptions = 1;
 
-
     public function handle($name = null): void
     {
         $headers = [
@@ -27,10 +26,10 @@ class PostExportJob implements ShouldQueue
             'body',
             'price',
             'category',
-            'user'
+            'user',
         ];
 
-        $fileName = sprintf("exports/%s.csv", $name ?? Str::uuid()->serialize());
+        $fileName = sprintf('exports/%s.csv', $name ?? Str::uuid()->serialize());
         $this->createFile($fileName);
         $file = $this->openFile($fileName);
         fputcsv($file, $headers);
@@ -48,18 +47,16 @@ class PostExportJob implements ShouldQueue
                 }
         });
 
-
-
         fclose($file);
     }
 
     private function createFile(string $fileName): void
     {
-        Storage::disk(config()->get('filesystem.default'))->put($fileName, "");
+        Storage::disk(config()->get('filesystem.default'))->put($fileName, '');
     }
 
     private function openFile(string $fileName)
     {
-        return fopen(Storage::disk(config()->get('filesystem.default'))->path($fileName), "w");
+        return fopen(Storage::disk(config()->get('filesystem.default'))->path($fileName), 'w');
     }
 }

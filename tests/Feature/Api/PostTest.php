@@ -49,7 +49,7 @@ class PostTest extends TestCase
             'title' => $post->title,
             'body' => $post->body,
         ])->assertCreated()
-            ->assertJson(function (AssertableJson $json) use ($post){
+            ->assertJson(function (AssertableJson $json) use ($post) {
                 $json->where('message', 'The post was created successfully')
                     ->has('data', function (AssertableJson $data) use ($post) {
                         $data->has('id')
@@ -60,7 +60,7 @@ class PostTest extends TestCase
                             ->has('created_at')
                             ->has('updated_at');
                 });
-            });;
+            });
 
         $this->assertDatabaseHas('posts', [
             'category_id' => $post->category_id,
@@ -76,7 +76,7 @@ class PostTest extends TestCase
 
         $this->getJson(route('api.posts.show', $post->id))
             ->assertOk()
-            ->assertJson(function (AssertableJson $json) use ($post){
+            ->assertJson(function (AssertableJson $json) use ($post) {
                 $json->has('data', function (AssertableJson $data) use ($post) {
                         $data->has('id')
                             ->where('title', $post->title)
@@ -86,7 +86,7 @@ class PostTest extends TestCase
                             ->has('created_at')
                             ->has('updated_at');
                     });
-        });;
+        });
 
     }
 
@@ -99,9 +99,9 @@ class PostTest extends TestCase
             'title' => 'test',
             'body' => 'test',
         ])->assertOk()
-        ->assertJson(function (AssertableJson $json) use ($post){
-            $json->where('message', 'The post was updated successfully');
-        });
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('message', 'The post was updated successfully');
+            });
 
         $this->assertDatabaseHas('posts', [
             'title' => 'test',
@@ -116,13 +116,13 @@ class PostTest extends TestCase
 
         $this->deleteJson(route('api.posts.destroy', $post->id))
             ->assertOk()
-            ->assertJson(function (AssertableJson $json) use ($post){
+            ->assertJson(function (AssertableJson $json) {
                 $json->where('message', 'The post was deleted successfully');
             });
 
         $this->assertDatabaseMissing('posts', [
             'title' => $post->title,
-            'body' => $post->body
+            'body' => $post->body,
         ]);
     }
 }

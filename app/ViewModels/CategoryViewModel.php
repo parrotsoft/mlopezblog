@@ -30,7 +30,7 @@ class CategoryViewModel extends ViewModel
         return [
             'ID',
             'Nombre',
-            'Opción'
+            'Opción',
         ];
     }
 
@@ -39,7 +39,7 @@ class CategoryViewModel extends ViewModel
         return [
             'id',
             'name',
-            '*'
+            '*',
         ];
     }
 }

@@ -76,7 +76,7 @@ class PostTest extends TestCase
 
         $this->assertDatabaseMissing('posts', [
             'title' => $post->title,
-            'body' => $post->body
+            'body' => $post->body,
         ]);
     }
 
@@ -85,5 +85,4 @@ class PostTest extends TestCase
         $this->get(route('posts.create'))
             ->assertViewIs('posts.create');
     }
-
 }

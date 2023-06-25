@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class CategoryListAction implements ActionInterface
 {
-
     public static function execute(array $data, int $id = 0): Model|bool|array|Collection
     {
         return Category::all();

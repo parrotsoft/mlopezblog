@@ -11,6 +11,7 @@ class PostExportController extends Controller
     public function __invoke(Request $request)
     {
         PostExportJob::dispatch();
+
         return redirect(route('posts.index'));
         //return response()->json(['response' => 200]);
     }

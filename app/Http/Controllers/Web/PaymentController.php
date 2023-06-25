@@ -20,6 +20,7 @@ class PaymentController extends Controller
     public function processPayment(Request $request, PaymentFactoryInterface $paymentFactory)
     {
         $processor = $paymentFactory->initializePayment($request->get('payment_type'));
+
         return $processor->pay($request);
         /*$this->sendEmail($processor);
         return view('payments.success', [
