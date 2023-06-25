@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class PostTest extends TestCase
@@ -17,7 +18,7 @@ class PostTest extends TestCase
         parent::setUp();
 
         $user = User::factory()->create();
-        $this->actingAs($user, 'api');
+        Sanctum::actingAs($user);
     }
 
     public function test_can_call_index(): void
