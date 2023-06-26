@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\ImportPostController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\RegisterController;
@@ -16,6 +17,7 @@ Route::name('api.')->group(function () {
             return $request->user();
         });
 
+        Route::post('posts/import', ImportPostController::class)->name('posts.import');
         Route::apiResource('posts', PostController::class);
         Route::apiResource('categories', CategoryController::class);
     });

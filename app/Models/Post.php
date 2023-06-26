@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * @property int id
@@ -20,6 +21,7 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'user_id',
         'category_id',
         'title',
@@ -39,12 +41,12 @@ class Post extends Model
         'category',
     ];
 
-    public function category()
+    public function category(): HasOne
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
     }
 
-    public function getFormattedPriceAttribute()
+    public function getFormattedPriceAttribute(): string
     {
         return number_format($this->attributes['price'], 0, ',', '.');
     }
