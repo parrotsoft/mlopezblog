@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\BaseApiController;
-use App\Domain\Category\CategoryListAction;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Collection;
+use App\Http\Resources\CategoryResource;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CategoryController extends Controller implements BaseApiController
 {
-    //
-    public function index(): Collection
+    public function index(): AnonymousResourceCollection
     {
-        return CategoryListAction::execute([]);
+        $categories = Category::query()->select(['id', 'name'])->paginate(10);
+
+        return CategoryResource::collection($categories);
     }
 
     public function store(Request $request): void

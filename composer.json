@@ -57,6 +57,9 @@
         ],
         "phpstan": [
             "vendor\\bin\\phpstan analyse -l 2 app/Domain"
+        ],
+        "pint": [
+            "vendor\\bin\\pint"
         ]
     },
     "extra": {
