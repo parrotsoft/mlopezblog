@@ -11,7 +11,6 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostController extends Controller
@@ -44,7 +43,7 @@ class PostController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function update(Request $request, int $id): JsonResponse
+    public function update(PostRequest $request, int $id): JsonResponse
     {
         $post = Post::query()->findOrFail($id);
 

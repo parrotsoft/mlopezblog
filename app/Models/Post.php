@@ -9,14 +9,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * @property int id
- * @property string title
- * @property string body
- * @property float price
- * @property int category_id
- * @property int user_id
- * @property Carbon created_at
- * @property Carbon updated_at
+ * @property int $id
+ * @property string $title
+ * @property string $body
+ * @property float $price
+ * @property int $category_id
+ * @property int $user_id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  */
 class Post extends Model
 {

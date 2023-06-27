@@ -2,12 +2,12 @@
 
 namespace App\Contracts;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 interface BaseApiController
 {
-    public function index(): Collection;
+    public function index(): AnonymousResourceCollection;
 
     public function store(Request $request): void;
 

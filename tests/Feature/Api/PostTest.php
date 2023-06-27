@@ -100,16 +100,16 @@ class PostTest extends TestCase
         $post = Post::factory()->create();
 
         $this->putJson(route('api.posts.update', $post->id), [
-            'title' => 'test',
-            'body' => 'test',
+            'title' => 'New Title Post',
+            'body' => 'New Body Post',
         ])->assertForbidden()
             ->assertJson(function (AssertableJson $json) {
                 $json->where('message', 'This action is unauthorized.')->etc();
             });
 
         $this->assertDatabaseMissing('posts', [
-            'title' => 'test',
-            'body' => 'test',
+            'title' => 'New Title Post',
+            'body' => 'New Body Post',
         ]);
     }
 
@@ -119,16 +119,16 @@ class PostTest extends TestCase
         $post = Post::factory()->create(['user_id' => $this->user->id]);
 
         $this->putJson(route('api.posts.update', $post->id), [
-            'title' => 'test',
-            'body' => 'test',
+            'title' => 'New Title Post',
+            'body' => 'New Body Post',
         ])->assertOk()
             ->assertJson(function (AssertableJson $json) {
                 $json->where('message', 'The post was updated successfully');
             });
 
         $this->assertDatabaseHas('posts', [
-            'title' => 'test',
-            'body' => 'test',
+            'title' => 'New Title Post',
+            'body' => 'New Body Post',
         ]);
     }
 
