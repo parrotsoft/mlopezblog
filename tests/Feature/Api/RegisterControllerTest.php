@@ -21,14 +21,11 @@ class RegisterControllerTest extends TestCase
             'password' => $this->faker->password(),
         ];
 
-        $response = $this->post(route('api.register'), $data, [
-            'Accept' => 'application/json',
-        ]);
-
+        $response = $this->postJson(route('api.register'), $data);
         $response->assertJsonMissingValidationErrors();
         $response->assertStatus(201);
         $response->assertJsonFragment([
-            'message' => trans('auth.user_created_message'),
+            'message' => 'The user was created successfully',
             'user' => [
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -53,10 +50,7 @@ class RegisterControllerTest extends TestCase
             'password' => '',
         ];
 
-        $response = $this->post(route('api.register'), $data, [
-            'Accept' => 'application/json',
-        ]);
-
+        $response = $this->postJson(route('api.register'), $data);
         $response->assertJsonValidationErrors(['name', 'email', 'password']);
         $response->assertStatus(422);
     }

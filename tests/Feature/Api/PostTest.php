@@ -37,6 +37,7 @@ class PostTest extends TestCase
                         ->has('body')
                         ->has('price')
                         ->has('category_id')
+                        ->has('category')
                         ->has('created_at')
                         ->has('updated_at');
                 })->etc();
@@ -87,6 +88,7 @@ class PostTest extends TestCase
                         ->where('body', $post->body)
                         ->has('price')
                         ->where('category_id', $post->category_id)
+                        ->has('category')
                         ->has('created_at')
                         ->has('updated_at');
                 });
