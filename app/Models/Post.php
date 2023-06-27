@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -13,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string body
  * @property float price
  * @property int category_id
+ * @property int user_id
  * @property Carbon created_at
  * @property Carbon updated_at
  */
@@ -44,6 +46,11 @@ class Post extends Model
     public function category(): HasOne
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function getFormattedPriceAttribute(): string

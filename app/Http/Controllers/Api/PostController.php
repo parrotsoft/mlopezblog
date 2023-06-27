@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -40,18 +41,32 @@ class PostController extends Controller
         return PostResource::make($post);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function update(Request $request, int $id): JsonResponse
     {
-        PostUpdateAction::execute($request->all(), $id);
+        $post = Post::query()->findOrFail($id);
+
+        $this->authorize('update', $post);
+
+        PostUpdateAction::execute($request->all(), $post->getKey());
 
         return response()->json([
             'message' => trans('message.updated', ['attribute' => 'post']),
         ], 200);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function destroy(int $id): JsonResponse
     {
-        PostDestroyAction::execute([], $id);
+        $post = Post::query()->findOrFail($id);
+
+        $this->authorize('delete', $post);
+
+        PostDestroyAction::execute([], $post->getKey());
 
         return response()->json([
             'message' => trans('message.deleted', ['attribute' => 'post']),

@@ -13,12 +13,15 @@ class PostTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $user;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $this->user = User::factory()->create();
+
+        Sanctum::actingAs($this->user);
     }
 
     public function test_can_call_index(): void
@@ -91,12 +94,31 @@ class PostTest extends TestCase
 
     }
 
-    public function test_can_update(): void
+    public function test_cannot_update_by_not_owner(): void
     {
         /** @var Post $post */
         $post = Post::factory()->create();
 
-        $this->put(route('api.posts.update', $post->id), [
+        $this->putJson(route('api.posts.update', $post->id), [
+            'title' => 'test',
+            'body' => 'test',
+        ])->assertForbidden()
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('message', 'This action is unauthorized.')->etc();
+            });
+
+        $this->assertDatabaseMissing('posts', [
+            'title' => 'test',
+            'body' => 'test',
+        ]);
+    }
+
+    public function test_can_update(): void
+    {
+        /** @var Post $post */
+        $post = Post::factory()->create(['user_id' => $this->user->id]);
+
+        $this->putJson(route('api.posts.update', $post->id), [
             'title' => 'test',
             'body' => 'test',
         ])->assertOk()
@@ -110,10 +132,27 @@ class PostTest extends TestCase
         ]);
     }
 
-    public function test_can_destroy(): void
+    public function test_cannot_destroy_by_not_owner(): void
     {
         /** @var Post $post */
         $post = Post::factory()->create();
+
+        $this->deleteJson(route('api.posts.destroy', $post->id))
+            ->assertForbidden()
+            ->assertJson(function (AssertableJson $json) {
+                $json->where('message', 'This action is unauthorized.')->etc();
+            });
+
+        $this->assertDatabaseHas('posts', [
+            'title' => $post->title,
+            'body' => $post->body,
+        ]);
+    }
+
+    public function test_can_destroy(): void
+    {
+        /** @var Post $post */
+        $post = Post::factory()->create(['user_id' => $this->user->id]);
 
         $this->deleteJson(route('api.posts.destroy', $post->id))
             ->assertOk()
