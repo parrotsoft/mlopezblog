@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Jobs;
 
+use App\Jobs\PostImportJob;
 use App\Mail\ImportMail;
 use App\Models\Category;
 use App\Models\User;
-use App\Jobs\PostImportJob;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -41,6 +41,7 @@ class PostImportJobTest extends TestCase
             'user_id' => $user->id,
         ]);
     }
+
     public function test_it_import_post_from_file_failed(): void
     {
         Storage::fake();
@@ -50,5 +51,4 @@ class PostImportJobTest extends TestCase
 
         $this->assertDatabaseCount('posts', 0);
     }
-
 }

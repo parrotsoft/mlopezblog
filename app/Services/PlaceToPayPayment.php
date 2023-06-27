@@ -22,8 +22,10 @@ class PlaceToPayPayment extends PaymentBase
 
         $order = OrderCreateAction::execute($request->all());
 
-        $result = Http::post(config('placetopay.url').'/api/session',
-        $this->createSession($order, $request->ip(), $request->userAgent()));
+        $result = Http::post(
+            config('placetopay.url').'/api/session',
+            $this->createSession($order, $request->ip(), $request->userAgent())
+        );
 
         if ($result->ok()) {
             $order->order_id = $result->json()['requestId'];

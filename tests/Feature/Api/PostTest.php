@@ -63,7 +63,7 @@ class PostTest extends TestCase
                             ->where('category_id', $post->category_id)
                             ->has('created_at')
                             ->has('updated_at');
-                });
+                    });
             });
 
         $this->assertDatabaseHas('posts', [
@@ -82,15 +82,15 @@ class PostTest extends TestCase
             ->assertOk()
             ->assertJson(function (AssertableJson $json) use ($post) {
                 $json->has('data', function (AssertableJson $data) use ($post) {
-                        $data->has('id')
-                            ->where('title', $post->title)
-                            ->where('body', $post->body)
-                            ->has('price')
-                            ->where('category_id', $post->category_id)
-                            ->has('created_at')
-                            ->has('updated_at');
-                    });
-        });
+                    $data->has('id')
+                        ->where('title', $post->title)
+                        ->where('body', $post->body)
+                        ->has('price')
+                        ->where('category_id', $post->category_id)
+                        ->has('created_at')
+                        ->has('updated_at');
+                });
+            });
 
     }
 
