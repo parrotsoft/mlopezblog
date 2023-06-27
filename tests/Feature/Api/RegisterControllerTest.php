@@ -28,7 +28,7 @@ class RegisterControllerTest extends TestCase
         $response->assertJsonMissingValidationErrors();
         $response->assertStatus(201);
         $response->assertJsonFragment([
-            'message' => trans('auth.user_created_message'),
+            'message' => 'The user was created successfully',
             'user' => [
                 'name' => $data['name'],
                 'email' => $data['email'],

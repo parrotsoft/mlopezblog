@@ -12,7 +12,7 @@ Route::name('api.')->group(function () {
     Route::post('register', RegisterController::class)->name('register');
     Route::post('login', LoginController::class)->name('login');
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:sanctum')->prefix('v1')->group(function () {
         Route::apiSingleton('profile', ProfileController::class)->destroyable();
 
         Route::apiResource('posts', PostController::class);

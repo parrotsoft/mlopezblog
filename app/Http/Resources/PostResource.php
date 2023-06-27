@@ -19,6 +19,7 @@ class PostResource extends JsonResource
             'body' => $this->body,
             'price' => $this->price,
             'category_id' => $this->category_id,
+            'category' => CategoryResource::make($this->whenLoaded('category')),
             'updated_at' => $this->updated_at,
             'created_at' => $this->created_at,
         ];

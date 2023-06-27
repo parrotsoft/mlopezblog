@@ -12,12 +12,16 @@ use App\Models\Post;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PostController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
-        $posts = Post::query()->paginate(10);
+        $posts = QueryBuilder::for(Post::class)
+            ->allowedFilters(['title', 'body', 'price', 'category_id'])
+            ->allowedIncludes('category')
+            ->paginate(10);
 
         return PostResource::collection($posts);
     }

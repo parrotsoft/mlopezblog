@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\RegisterRequest;
+use App\Http\Resources\ProfileResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
@@ -18,8 +19,8 @@ class RegisterController extends Controller
         ]);
 
         return response()->json([
-            'message' => trans('auth.user_created_message'),
-            'user' => $user->only(['name', 'email']),
+            'message' => trans('message.created', ['attribute' => 'user']),
+            'user' => ProfileResource::make($user),
         ], 201);
     }
 }
