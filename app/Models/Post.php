@@ -39,10 +39,6 @@ class Post extends Model
         'price' => 'integer',
     ];
 
-    protected $with = [
-        'category',
-    ];
-
     public function category(): HasOne
     {
         return $this->hasOne(Category::class, 'id', 'category_id');

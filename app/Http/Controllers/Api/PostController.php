@@ -39,8 +39,12 @@ class PostController extends Controller
         ], 201);
     }
 
-    public function show(Post $post): PostResource
+    public function show(int $id): PostResource
     {
+        $post = QueryBuilder::for(Post::class)
+            ->allowedIncludes('category')
+            ->findOrFail($id);
+
         return PostResource::make($post);
     }
 

@@ -11,12 +11,16 @@ class ImportPostController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
+        if(empty($request->file('file'))) {
+            return response()->json(['message' => 'A file is required'], 400);
+        }
+
         $file = $request->file('file')->store('imports');
 
         dispatch(new PostImportJob($file, $request->user()));
 
         return response()->json([
-            'message' => 'La importación se ha iniciado correctamente',
+            'message' => 'The importation has been started',
         ]);
     }
 }
