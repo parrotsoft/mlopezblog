@@ -20,7 +20,7 @@ class RegisterController extends Controller
 
         return response()->json([
             'message' => trans('message.created', ['attribute' => 'user']),
-            'user' => ProfileResource::make($user),
+            'user' => $user->only(['name', 'email']),
         ], 201);
     }
 }
