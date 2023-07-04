@@ -29,7 +29,7 @@ class PostViewModel extends ViewModel
             'Categoría',
             'Valor',
             'Opción',
-            ''
+            '',
         ];
     }
 
@@ -41,7 +41,7 @@ class PostViewModel extends ViewModel
             'category',
             'price',
             '*',
-            'pay'
+            'pay',
         ];
     }
 

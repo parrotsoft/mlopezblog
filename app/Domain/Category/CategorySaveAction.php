@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class CategorySaveAction implements ActionInterface
 {
-
     public static function execute(array $data, int $id = 0): Model
     {
         return Category::query()->create($data);

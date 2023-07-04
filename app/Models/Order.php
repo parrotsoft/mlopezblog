@@ -48,14 +48,14 @@ class Order extends Model
     public function completed(): void
     {
         $this->update([
-            'status' => 'COMPLETED'
+            'status' => 'COMPLETED',
         ]);
     }
 
     public function canceled(): void
     {
         $this->update([
-            'status' => 'CANCELED'
+            'status' => 'CANCELED',
         ]);
     }
 

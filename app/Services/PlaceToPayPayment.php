@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Contracts\PaymentInterface;
 use App\Domain\Order\OrderCreateAction;
 use App\Domain\Order\OrderGetLastAction;
 use App\Domain\Order\OrderUpdateAction;
@@ -23,14 +22,17 @@ class PlaceToPayPayment extends PaymentBase
 
         $order = OrderCreateAction::execute($request->all());
 
-        $result = Http::post(config('placetopay.url').'/api/session',
-        $this->createSession($order, $request->ip(), $request->userAgent()));
+        $result = Http::post(
+            config('placetopay.url').'/api/session',
+            $this->createSession($order, $request->ip(), $request->userAgent())
+        );
 
         if ($result->ok()) {
             $order->order_id = $result->json()['requestId'];
             $order->url = $result->json()['processUrl'];
 
             OrderUpdateAction::execute($order);
+
             return redirect()->to($order->url);
         }
 
@@ -48,15 +50,15 @@ class PlaceToPayPayment extends PaymentBase
             'auth' => $this->getAuth(),
             'buyer' => [
                 'name' => auth()->user()->name,
-                'email' => auth()->user()->email
+                'email' => auth()->user()->email,
             ],
             'payment' => [
                 'reference' => $order->id,
                 'description' => $order->post->title,
                 'amount' => [
                     'currency' => 'COP',
-                    'total' => $order->post->price
-                ]
+                    'total' => $order->post->price,
+                ],
             ],
             'expiration' => Carbon::now()->addHour(),
             'returnUrl' => route('payments.processResponse'),
@@ -89,7 +91,7 @@ class PlaceToPayPayment extends PaymentBase
         $order = OrderGetLastAction::execute();
 
         $result = Http::post(config('placetopay.url')."/api/session/$order->order_id", [
-            'auth' => $this->getAuth()
+            'auth' => $this->getAuth(),
         ]);
 
         if ($result->ok()) {
@@ -102,10 +104,10 @@ class PlaceToPayPayment extends PaymentBase
 
             return view('payments.success', [
                 'processor' => $order->provider,
-                'status' => $order->status
+                'status' => $order->status,
             ]);
         }
 
-        throw  new \Exception($result->body());
+        throw new \Exception($result->body());
     }
 }

@@ -2,43 +2,81 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Contracts\ApiExportController;
-use App\Contracts\BaseApiController;
-use App\Domain\Post\PostListAction;
+use App\Domain\Post\PostDestroyAction;
+use App\Domain\Post\PostSaveAction;
+use App\Domain\Post\PostUpdateAction;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
+use App\Http\Resources\PostResource;
+use App\Models\Post;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Spatie\QueryBuilder\QueryBuilder;
 
-class PostController extends Controller implements BaseApiController, ApiExportController
+class PostController extends Controller
 {
-    //
-    public function index(): Collection
+    public function index(): AnonymousResourceCollection
     {
-        return PostListAction::execute([]);
+        $posts = QueryBuilder::for(Post::class)
+            ->allowedFilters(['title', 'body', 'price', 'category_id'])
+            ->allowedIncludes('category')
+            ->paginate(10);
+
+        return PostResource::collection($posts);
     }
 
-    public function store(Request $request): void
+    public function store(PostRequest $request): JsonResponse
     {
-        // TODO: Implement store() method.
+        $data = $request->all();
+        $data['user_id'] = $request->user()->getKey();
+
+        $post = PostSaveAction::execute($data);
+
+        return response()->json([
+            'message' => trans('message.created', ['attribute' => 'post']),
+            'data' => new PostResource($post),
+        ], 201);
     }
 
-    public function show(int $id): void
+    public function show(int $id): PostResource
     {
-        // TODO: Implement show() method.
+        $post = QueryBuilder::for(Post::class)
+            ->allowedIncludes('category')
+            ->findOrFail($id);
+
+        return PostResource::make($post);
     }
 
-    public function update(Request $request, int $id): void
+    /**
+     * @throws AuthorizationException
+     */
+    public function update(PostRequest $request, int $id): JsonResponse
     {
-        // TODO: Implement update() method.
+        $post = Post::query()->findOrFail($id);
+
+        $this->authorize('update', $post);
+
+        PostUpdateAction::execute($request->all(), $post->getKey());
+
+        return response()->json([
+            'message' => trans('message.updated', ['attribute' => 'post']),
+        ], 200);
     }
 
-    public function destroy($id): void
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroy(int $id): JsonResponse
     {
-        // TODO: Implement destroy() method.
-    }
+        $post = Post::query()->findOrFail($id);
 
-    public function export(): void
-    {
-        // TODO: Implement export() method.
+        $this->authorize('delete', $post);
+
+        PostDestroyAction::execute([], $post->getKey());
+
+        return response()->json([
+            'message' => trans('message.deleted', ['attribute' => 'post']),
+        ], 200);
     }
 }

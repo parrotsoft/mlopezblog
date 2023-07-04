@@ -8,5 +8,4 @@ class OrderCanceledAction
     {
         OrderGetAction::execute($orderId)->canceled();
     }
-
 }
