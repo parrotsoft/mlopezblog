@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class CategoryDestroyAction implements ActionInterface
 {
-
     public static function execute(array $data, int $id = 0): Model|bool|array
     {
         return Category::query()->find($id)->delete();

@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\CategoryController;
+use App\Http\Controllers\Web\OrderController;
+use App\Http\Controllers\Web\PaymentController;
+use App\Http\Controllers\Web\PostController;
+use App\Http\Controllers\Web\PostExportController;
+use App\Http\Controllers\Web\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,8 +38,9 @@ Route::middleware('auth')->group(function () {
         'show',
         'store',
         'update',
-        'destroy'
+        'destroy',
     ]);
+    Route::get('posts/exports', PostExportController::class)->name('posts.export');
     Route::resource('posts', PostController::class)->only(['index', 'create', 'show', 'store', 'update', 'destroy']);
 
     Route::resource('orders', OrderController::class)->only(['index']);
@@ -48,4 +50,4 @@ Route::middleware('auth')->group(function () {
     Route::get('payments/payment/response', [PaymentController::class, 'processResponse'])->name('payments.processResponse');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Contracts\PaymentInterface;
 use App\Domain\Order\OrderCreateAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;

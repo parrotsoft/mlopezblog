@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostFindAction implements ActionInterface
 {
-
     public static function execute(array $data, int $id = 0): Model|bool|array|Collection|null
     {
         return Post::query()->find($id);

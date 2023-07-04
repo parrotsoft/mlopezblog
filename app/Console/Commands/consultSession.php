@@ -32,7 +32,7 @@ class consultSession extends Command
         foreach ($orders as $order) {
             echo $order->order_id.PHP_EOL;
             $result = Http::post(config('placetopay.url')."/api/session/$order->order_id", [
-                'auth' => $this->getAuth()
+                'auth' => $this->getAuth(),
             ]);
 
             if ($result->ok()) {
@@ -45,7 +45,6 @@ class consultSession extends Command
             }
         }
     }
-
 
     private function getAuth(): array
     {
